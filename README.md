@@ -21,6 +21,8 @@ The core logic is handled by the `DependencyExplorer` class, which basically:
 - computes key stats (total dependencies, etc)
 - build the dependency tree and display it
 
+Everything runs on the client side, and the website is deployed on Github Pages.
+
 <br>
 
 ## Contribute
