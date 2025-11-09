@@ -1,0 +1,248 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #000;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 90vh;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.footer {
+  text-align: center;
+  color: #e3e3e3ff;
+}
+
+.yellow-sunflower {
+  color: #ffc300;
+}
+
+.github {
+  color: #ff4444;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  margin-top: 2rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.header p {
+  color: #888;
+  font-size: 1.1rem;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  position: relative;
+}
+
+#packageInput {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 50px;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#packageInput:focus {
+  border-color: #666;
+  background: #1a1a1a;
+}
+
+#packageInput::placeholder {
+  color: #666;
+}
+
+.loading {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+  margin: 2rem 0;
+  display: none;
+}
+
+.error {
+  text-align: center;
+  color: #ff4444;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: rgba(255, 68, 68, 0.1);
+  border-radius: 8px;
+  display: none;
+}
+
+.results {
+  display: none;
+  margin-top: 2rem;
+}
+
+.stats {
+  background: #111;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border: 1px solid #222;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #fff;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tree-container {
+  background: #111;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #222;
+  overflow-x: auto;
+}
+
+.tree {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 0.9rem;
+  min-width: fit-content;
+}
+
+.tree-node {
+  margin: 0.25rem 0;
+  position: relative;
+}
+
+.tree-children {
+  margin-left: 1.5rem;
+  position: relative;
+}
+
+.tree-children::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #333;
+}
+
+.tree-node:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 0.7rem;
+  width: 1rem;
+  height: 1px;
+  background: #333;
+}
+
+.tree-node::after {
+  content: "";
+  position: absolute;
+  left: -1.5rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #333;
+}
+
+.tree-node:last-child::after {
+  height: 0.7rem;
+}
+
+.package-name {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  left: -0.5rem;
+}
+
+.package-name:hover {
+  background: #1a1a1a;
+}
+
+.tree-node:has(.tree-children) > .package-name::before {
+  content: "📦 ";
+  margin-right: 0.3rem;
+}
+
+.tree-node:not(:has(.tree-children)) > .package-name::before {
+  content: "📄 ";
+  margin-right: 0.3rem;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
