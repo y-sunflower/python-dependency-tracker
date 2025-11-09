@@ -9,6 +9,7 @@ class DependencyExplorer {
     this.tree = document.getElementById("tree");
 
     this.initEvents();
+    this.initFromURL();
   }
 
   initEvents() {
@@ -28,6 +29,15 @@ class DependencyExplorer {
         }
       }, 500);
     });
+  }
+
+  initFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const pkg = params.get("package");
+    if (pkg) {
+      this.input.value = pkg;
+      this.searchPackage(pkg);
+    }
   }
 
   async searchPackage(packageName) {
@@ -196,7 +206,9 @@ class DependencyExplorer {
 
     return `
                     <div class="tree-node">
+                      <a href="?package=${node.name}">
                         <div class="package-name">${node.name}</div>
+                      </a>
                         ${
                           hasChildren
                             ? `

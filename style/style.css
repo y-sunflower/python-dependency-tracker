@@ -22,6 +22,11 @@ a {
   color: #ffc300;
 }
 
+.tree-node a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -218,7 +223,7 @@ a {
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease-in;
+  animation: fadeIn 0.15s ease-in;
 }
 
 .package-summary {
