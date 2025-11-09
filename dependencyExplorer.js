@@ -5,7 +5,10 @@ class DependencyExplorer {
     this.error = document.getElementById("error");
     this.results = document.getElementById("results");
     this.statsGrid = document.getElementById("statsGrid");
+    this.packageSummary = document.getElementById("summary");
     this.tree = document.getElementById("tree");
+    this.showVersion = false;
+    this.showVersionCB = document.getElementsByClassName("messageCheckbox")[0];
 
     this.initEvents();
   }
@@ -14,6 +17,14 @@ class DependencyExplorer {
     this.input.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         this.searchPackage(this.input.value.trim());
+      }
+    });
+
+    this.showVersionCB.addEventListener("change", (e) => {
+      this.showVersion = e.target.checked;
+      const packageName = this.input.value.trim();
+      if (packageName) {
+        this.searchPackage(packageName);
       }
     });
 
@@ -54,10 +65,12 @@ class DependencyExplorer {
     }
 
     const data = await response.json();
+    const summary = data.info.summary;
     const dependencies = this.extractRequiredDependencies(data);
     const tree = await this.buildDependencyTree(packageName, dependencies);
 
     return {
+      summary: summary,
       package: packageName,
       tree: tree,
       stats: this.calculateStats(tree),
@@ -77,12 +90,20 @@ class DependencyExplorer {
       .map((req) => {
         // Extract package name from requirement string
         // Remove version specifiers and environment markers
+        // let packageName;
+        // if (this.showVersion) {
+        //   packageName = req;
+        // } else {
+        //   packageName = req
+        //     .split(";")[0] // Remove environment markers (e.g., python version)
+        //     .trim()
+        //     .split(/[<>!=]/)[0] // Remove version specifiers
+        //     .trim();
+        // }
         const packageName = req
-          .split(";")[0] // Remove environment markers
+          .split(";")[0] // Remove environment markers (e.g., python version)
           .trim()
           .split(/[<>!=]/)[0] // Remove version specifiers
-          .trim()
-          .split(" ")[0] // Take only the first word (package name)
           .trim();
 
         // Handle cases where package name might have [extra] suffix
@@ -156,6 +177,11 @@ class DependencyExplorer {
   }
 
   displayResults(data) {
+    this.packageSummary.innerHTML = `
+                    <p class="package-summary">
+                      <strong>${data.package}</strong>: ${data.summary}
+                    </p>
+    `;
     this.statsGrid.innerHTML = `
                     <div class="stat-item">
                         <span class="stat-number">${data.stats.directDependencies}</span>

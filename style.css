@@ -217,6 +217,14 @@ body {
   animation: fadeIn 0.5s ease-in;
 }
 
+.package-summary {
+  font-style: italic;
+  font-weight: 300;
+  text-align: center;
+  color: #888;
+  margin-bottom: 1.2em;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
