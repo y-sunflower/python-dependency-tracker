@@ -208,13 +208,8 @@ body {
   background: #1a1a1a;
 }
 
-.tree-node:has(.tree-children) > .package-name::before {
+.package-name::before {
   content: "📦 ";
-  margin-right: 0.3rem;
-}
-
-.tree-node:not(:has(.tree-children)) > .package-name::before {
-  content: "📄 ";
   margin-right: 0.3rem;
 }
 
