@@ -176,51 +176,81 @@ class DependencyExplorer {
   }
 
   displayResults(data) {
-    this.packageSummary.innerHTML = `
-                    <p class="package-summary">
-                      <a href="https://pypi.org/project/${data.package}/" target="_blank">${data.package}</a> (v${data.packageVersion}) — ${data.summary}
-                    </p>
-    `;
-    this.statsGrid.innerHTML = `
-                    <div class="stat-item">
-                        <span class="stat-number">${data.stats.directDependencies}</span>
-                        <span class="stat-label">Direct Dependencies</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">${data.stats.totalDependencies}</span>
-                        <span class="stat-label">Total Dependencies</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">${data.stats.maxDepth}</span>
-                        <span class="stat-label">Max Depth</span>
-                    </div>
-                `;
+    // Clear previous content
+    this.packageSummary.textContent = "";
+    this.statsGrid.textContent = "";
+    this.tree.textContent = "";
 
-    this.tree.innerHTML = this.renderTree(data.tree);
+    // Safe package summary
+    const summaryP = document.createElement("p");
+    summaryP.className = "package-summary";
+
+    const packageLink = document.createElement("a");
+    packageLink.href = `https://pypi.org/project/${encodeURIComponent(
+      data.package
+    )}/`;
+    packageLink.target = "_blank";
+    packageLink.textContent = data.package;
+
+    summaryP.appendChild(packageLink);
+    summaryP.append(` (v${data.packageVersion}) — ${data.summary}`);
+
+    this.packageSummary.appendChild(summaryP);
+
+    // Stats grid
+    const stats = [
+      { label: "Direct Dependencies", value: data.stats.directDependencies },
+      { label: "Total Dependencies", value: data.stats.totalDependencies },
+      { label: "Max Depth", value: data.stats.maxDepth },
+    ];
+
+    stats.forEach((stat) => {
+      const div = document.createElement("div");
+      div.className = "stat-item";
+
+      const number = document.createElement("span");
+      number.className = "stat-number";
+      number.textContent = stat.value;
+
+      const label = document.createElement("span");
+      label.className = "stat-label";
+      label.textContent = stat.label;
+
+      div.appendChild(number);
+      div.appendChild(label);
+      this.statsGrid.appendChild(div);
+    });
+
+    // Dependency tree
+    this.tree.appendChild(this.renderTree(data.tree));
+
     this.showResults();
   }
 
   renderTree(node) {
-    const hasChildren = node.children && node.children.length > 0;
+    const container = document.createElement("div");
+    container.className = "tree-node";
 
-    return `
-                    <div class="tree-node">
-                      <a href="?package=${node.name}">
-                        <div class="package-name">${node.name}</div>
-                      </a>
-                        ${
-                          hasChildren
-                            ? `
-                            <div class="tree-children">
-                                ${node.children
-                                  .map((child) => this.renderTree(child))
-                                  .join("")}
-                            </div>
-                        `
-                            : ""
-                        }
-                    </div>
-                `;
+    const link = document.createElement("a");
+    link.href = `?package=${encodeURIComponent(node.name)}`;
+
+    const nameDiv = document.createElement("div");
+    nameDiv.className = "package-name";
+    nameDiv.textContent = node.name;
+
+    link.appendChild(nameDiv);
+    container.appendChild(link);
+
+    if (node.children && node.children.length > 0) {
+      const childrenContainer = document.createElement("div");
+      childrenContainer.className = "tree-children";
+      node.children.forEach((child) => {
+        childrenContainer.appendChild(this.renderTree(child));
+      });
+      container.appendChild(childrenContainer);
+    }
+
+    return container;
   }
 
   showLoading() {
