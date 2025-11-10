@@ -238,7 +238,14 @@ class DependencyExplorer {
 
     const nameDiv = document.createElement("div");
     nameDiv.className = "package-name";
-    nameDiv.textContent = node.name;
+
+    let subCount = this.countSubDependencies(node);
+    if (subCount === 0) {
+      subCount = "";
+    } else {
+      subCount = `(${subCount})`;
+    }
+    nameDiv.textContent = `${node.name} ${subCount}`;
 
     link.appendChild(nameDiv);
     container.appendChild(link);
@@ -253,6 +260,22 @@ class DependencyExplorer {
     }
 
     return container;
+  }
+
+  countSubDependencies(node) {
+    const visited = new Set();
+
+    const traverse = (n) => {
+      for (const c of n.children || []) {
+        if (!visited.has(c.name)) {
+          visited.add(c.name);
+          traverse(c);
+        }
+      }
+    };
+
+    traverse(node);
+    return visited.size;
   }
 
   showLoading(packageName) {
