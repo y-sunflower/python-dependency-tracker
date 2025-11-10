@@ -47,7 +47,7 @@ class DependencyExplorer {
     url.searchParams.set("package", packageName);
     window.history.replaceState({}, "", url);
 
-    this.showLoading();
+    this.showLoading(packageName);
     this.hideError();
     this.hideResults();
 
@@ -99,14 +99,15 @@ class DependencyExplorer {
         requiresDist
           .filter((req) => !req.includes("extra =="))
           .map((req) => {
-            return req
+            let name = req
               .split(";")[0] // remove extra spec (e.g., python version)
               .trim()
               .split(/[<>!=]/)[0] // remove version
               .trim()
               .split("[")[0] // just in case!
               .toLowerCase()
-              .replace(/\s*\(.*/g, "");
+              .replace(/\s*\(.*/g, ""); // https://github.com/y-sunflower/python-dependency-explorer/issues/8
+            return name;
           })
           .filter((pkg) => pkg && pkg.length > 0)
       ),
@@ -254,7 +255,8 @@ class DependencyExplorer {
     return container;
   }
 
-  showLoading() {
+  showLoading(packageName) {
+    this.loading.textContent = `Analyzing ${packageName} dependencies...`;
     this.loading.style.display = "block";
   }
 
